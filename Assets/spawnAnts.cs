@@ -4,10 +4,11 @@ using System.Collections;
 public class spawnAnts : MonoBehaviour {
 	public GameObject antPrefab;
 	public float spawnDelayTime;
+	public float foodAmount;
+
 
 	// Use this for initialization
 	void Start () {
-		Instantiate (antPrefab, new Vector2(1,1), Quaternion.identity);
 		StartCoroutine(waitAndSpawn (spawnDelayTime));
 	}
 	
@@ -17,7 +18,10 @@ public class spawnAnts : MonoBehaviour {
 	}
 
 	IEnumerator waitAndSpawn(float delayTime){
-		Instantiate (antPrefab, new Vector2(Random.Range(-5.0f,5.0f),Random.Range(-5.0f,5.0f)), Quaternion.identity);
+		if (foodAmount > 0) {
+			foodAmount--;
+			Instantiate (antPrefab, new Vector2 (Random.Range (-5.0f, 5.0f), Random.Range (-5.0f, 5.0f)), Quaternion.identity);
+		}
 		yield return new WaitForSeconds(delayTime);
 		StartCoroutine(waitAndSpawn (delayTime));
 	}
