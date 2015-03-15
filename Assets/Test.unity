@@ -201,7 +201,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   antPrefab: {fileID: 182530, guid: e2373445e1627b04c8ad8b3b0cf59db5, type: 2}
-  spawnDelayTime: .5
+  spawnDelayTime: 1.29999995
+  foodAmount: 10
 --- !u!4 &1116816807
 Transform:
   m_ObjectHideFlags: 0
