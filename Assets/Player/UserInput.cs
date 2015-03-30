@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Resources;
+using ResourceManager;
 
 public class UserInput : MonoBehaviour {
 

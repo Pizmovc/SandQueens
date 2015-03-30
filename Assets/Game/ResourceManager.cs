@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 
 //Remember, also, that any variables or methods we add to ResourceManager will also need to be declared as static.
 
-namespace Resources {
+namespace ResourceManager {
 	public static class RM {
 		public static float ScrollSpeed { get { return 25; }}
 		public static float RotateSpeed { get { return 100; }}
@@ -18,19 +19,26 @@ namespace Resources {
 			public static Color Color { get { return Color.yellow; }}
 			public static Mesh  Mesh{ 
 				get {
-					OriginalTerrainMesh = new Mesh();
-					OriginalTerrainMesh.Clear();
-					
-					//		mesh.uv = newUV;
-					//		mesh.triangles = newTriangles;
+					if(Resources.Load("terrainMesh") != null){
+						OriginalTerrainMesh = Resources.Load("terrainMesh") as Mesh;
+					}
+					else{
+
+						
+						OriginalTerrainMesh = new Mesh();
+						OriginalTerrainMesh.Clear();
+						
+						//		mesh.uv = newUV;
+						//		mesh.triangles = newTriangles;
 
 
-					OriginalTerrainMesh.vertices = Vertices;
-					//OriginalTerrainMesh.uv = UV;
-					OriginalTerrainMesh.triangles = Triangles;
-					OriginalTerrainMesh.RecalculateNormals();
-					OriginalTerrainMesh.RecalculateBounds();
-
+						OriginalTerrainMesh.vertices = Vertices;
+						//OriginalTerrainMesh.uv = UV;
+						OriginalTerrainMesh.triangles = Triangles;
+						OriginalTerrainMesh.RecalculateNormals();
+						OriginalTerrainMesh.RecalculateBounds();
+						AssetDatabase.CreateAsset(OriginalTerrainMesh,"Assets/Resources/terrainMesh.asset");
+					}
 					return OriginalTerrainMesh;
 				}
 			}
