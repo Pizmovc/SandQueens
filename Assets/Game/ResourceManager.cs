@@ -6,9 +6,11 @@ using System.Collections;
 
 namespace ResourceManager {
 	public static class RM {
-		public static float ScrollSpeed { get { return 25; }}
-		public static float RotateSpeed { get { return 100; }}
-
+		public static float ScrollSpeed { get { return 80; }}
+		public static float MoveSpeed { get { return 70; }}
+		public static int ScrollWidth { get { return 30; } }
+		public static float MinCameraHeight { get { return 5; } }
+		public static float MaxCameraHeight { get { return 50; } }
 
 
 		public static class TerrainMesh {
@@ -16,27 +18,23 @@ namespace ResourceManager {
 			public static float BlockSize { get { return 1;}}
 			public static int Height { get { return 60; }}
 			public static int Width { get { return 100; }}
-			public static Color Color { get { return Color.yellow; }}
+			//public static Color Color { get { return Color.yellow; }}
 			public static Mesh  Mesh{ 
 				get {
 					if(Resources.Load("terrainMesh") != null){
 						OriginalTerrainMesh = Resources.Load("terrainMesh") as Mesh;
+
+
 					}
 					else{
-
-						
 						OriginalTerrainMesh = new Mesh();
 						OriginalTerrainMesh.Clear();
-						
-						//		mesh.uv = newUV;
-						//		mesh.triangles = newTriangles;
-
-
 						OriginalTerrainMesh.vertices = Vertices;
-						//OriginalTerrainMesh.uv = UV;
 						OriginalTerrainMesh.triangles = Triangles;
+						OriginalTerrainMesh.uv = UV;
 						OriginalTerrainMesh.RecalculateNormals();
 						OriginalTerrainMesh.RecalculateBounds();
+						OriginalTerrainMesh.Optimize();
 						AssetDatabase.CreateAsset(OriginalTerrainMesh,"Assets/Resources/terrainMesh.asset");
 					}
 					return OriginalTerrainMesh;
@@ -70,7 +68,30 @@ namespace ResourceManager {
 					return TemporaryVertices;
 				}
 			}
-			public static Vector2[] UV;
+			public static Vector2[] UV{
+				get {
+					Vector2[] TemporaryUVs = new Vector2[OriginalTerrainMesh.vertexCount];
+
+					//Debug.Log();
+					int indexCounter = 0;
+					for(int h = 0; h < Height; h++){
+						for(int w = 0; w < Width; w++){
+							for(int i = 0; i < 2; i++){
+								TemporaryUVs[indexCounter++] = new Vector2(0,0);
+								if(i == 0){
+									TemporaryUVs[indexCounter++] = new Vector2(0,1);
+									TemporaryUVs[indexCounter++] = new Vector2(1,1);
+								}
+								else{
+									TemporaryUVs[indexCounter++] = new Vector3(1,1);
+									TemporaryUVs[indexCounter++] = new Vector3(1,0);
+								}
+							}
+						}
+					}
+					return(TemporaryUVs);
+				}
+			}
 			public static int[] Triangles{
 				get {
 					int[] TemporaryTriangles = new int[OriginalTerrainMesh.vertices.Length];

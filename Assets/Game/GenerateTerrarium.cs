@@ -9,7 +9,7 @@ public class GenerateTerrarium : MonoBehaviour {
 		Mesh mesh = RM.TerrainMesh.Mesh;
 		GetComponent<MeshFilter>().mesh = mesh;
 
-		mesh.Optimize();
+
 	}
 	
 	// Update is called once per frame
