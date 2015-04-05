@@ -33,8 +33,11 @@ public class UserInput : MonoBehaviour {
 			movement.z += RM.MoveSpeed;
 		}
 
+		//convert from local space to world space
 		movement = Camera.main.transform.TransformDirection(movement);
+		//we don't want camera changing height (y)
 		movement.y = 0;
+		//but we do want, if user scrolls
 		movement.y -= RM.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");
 
 

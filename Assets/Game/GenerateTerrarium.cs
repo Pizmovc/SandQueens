@@ -8,7 +8,7 @@ public class GenerateTerrarium : MonoBehaviour {
 	void Start () {
 		Mesh mesh = RM.TerrainMesh.Mesh;
 		GetComponent<MeshFilter>().mesh = mesh;
-
+		GetComponent<MeshCollider> ().sharedMesh = mesh;
 
 	}
 	

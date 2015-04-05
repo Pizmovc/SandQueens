@@ -7,7 +7,7 @@ using System.Collections;
 namespace ResourceManager {
 	public static class RM {
 		public static float ScrollSpeed { get { return 80; }}
-		public static float MoveSpeed { get { return 70; }}
+		public static float MoveSpeed { get { return 60; }}
 		public static int ScrollWidth { get { return 30; } }
 		public static float MinCameraHeight { get { return 5; } }
 		public static float MaxCameraHeight { get { return 50; } }
