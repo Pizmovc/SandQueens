@@ -6,6 +6,7 @@ public class UserInput : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//Camera.main.transform.position = new Vector3 (RM.TerrainMesh.Width/2,180f,-10);
 	}
 	
 	// Update is called once per frame
