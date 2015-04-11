@@ -2,15 +2,22 @@
 using UnityEditor;
 using System.Collections;
 
-//Remember, also, that any variables or methods we add to ResourceManager will also need to be declared as static.
-
 namespace ResourceManager {
 	public static class RM {
-		public static float ScrollSpeed { get { return 80; }}
-		public static float MoveSpeed { get { return 60; }}
-		public static int ScrollWidth { get { return 30; } }
-		public static float MinCameraHeight { get { return 5; } }
-		public static float MaxCameraHeight { get { return 50; } }
+		public static class Camera{
+			public static float scrollSpeed { get { return 100; }}
+			public static float moveSpeed { get { return 60; }}
+			public static int scrollWidth { get { return 30; } }
+			public static float minCameraHeight { get { return RM.Terrarium.height; } }
+			public static float maxCameraHeight { get { return 4*RM.Terrarium.height; } }
+		}
+
+		public static class Terrarium{
+			public static float width { get { return 10; }}
+			public static float length { get { return width; }}
+			public static float height { get { return 20; }}
+			public static float sandBaseHeight { get { return 10; }}
+		}
 
 	}
 }
