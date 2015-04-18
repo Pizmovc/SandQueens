@@ -27,7 +27,7 @@ public class Ant : MonoBehaviour  {
 	}
 
 	public virtual void AddDestination(Vector3 destination){
-		Debug.Log ("Destination: " + destination);
+		//Debug.Log ("Destination: " + destination);
 		destinationList.Add(destination);
 	}
 
@@ -53,8 +53,13 @@ public class Ant : MonoBehaviour  {
 	}
 
 	public virtual void FixedUpdate(){
+		if(Vector3.Distance(transform.position, GetDestination()) > 1)
+			GoToDestination ();
+	}
+
+	public virtual void GoToDestination(){
 		Vector3 destination = GetDestination();
-		destination.y = transform.position.y-1;
+		destination.y = transform.position.y;
 		transform.LookAt (destination);
 		GetComponent<Rigidbody>().AddRelativeForce(destination * speed * 0.1f ,ForceMode.Force);
 	}

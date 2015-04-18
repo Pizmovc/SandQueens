@@ -19,6 +19,9 @@ obj/
 *.unityproj
 *.booproj
 
+*.exe
+SandQueens_Data/
+
 # ============ #
 # OS generated #
 # ============ #

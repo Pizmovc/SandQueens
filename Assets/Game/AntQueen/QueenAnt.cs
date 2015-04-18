@@ -23,13 +23,14 @@ public class QueenAnt : Ant {
 		transform.position = startingPosition;
 	}
 
+
 	IEnumerator spawnAnts(float delay){
 		GameObject ant = GameObject.CreatePrimitive(PrimitiveType.Capsule);
 		ant.transform.position = transform.position;
 		ant.name = "Ant " + successiveAntNumber.ToString();
 		successiveAntNumber ++;
 		ant.AddComponent<Ant> ();
-		ant.GetComponent<Ant>().AddDestination(new Vector3(Random.Range(0,RM.Terrarium.terrainData.size.x),0, Random.Range(0,RM.Terrarium.terrainData.size.z)));
+		ant.GetComponent<Ant>().AddDestination(new Vector3(Random.Range(10,RM.Terrarium.terrainData.size.x-10),0, Random.Range(10,RM.Terrarium.terrainData.size.z-10)));
 		yield return new WaitForSeconds(delay);
 		StartCoroutine(spawnAnts (delay));
 	}

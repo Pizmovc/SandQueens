@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.Collections;
 
 namespace ResourceManager {
@@ -20,7 +22,7 @@ namespace ResourceManager {
 			}
 
 			private static bool generateNewTerrain { get { return true; }}
-			public static float width { get { return 10.0f; }}
+			public static float width { get { return 100.0f; }}
 			public static float length { get { return width; }}
 			public static float height { get { return 20.0f; }}
 			public static float sandBaseHeight { get { return 10.0f; }}
@@ -108,14 +110,14 @@ namespace ResourceManager {
 					else{
 						Debug.Log("No terrainData found on disk, generating a new random one...");
 
-						terrainData.size = new Vector3(width, height - sandBaseHeight, length);
-						Debug.Log ("Original terrain size: " + terrainData.size);
-						terrainData.heightmapResolution = heightmapResolution;
-						Debug.Log ("Bigger terrain size: " + terrainData.size);
-						terrainData.baseMapResolution = baseMapResolution;
 
+						terrainData.size = new Vector3(width, height - sandBaseHeight, length);
+						terrainData.heightmapResolution = heightmapResolution;
+						terrainData.baseMapResolution = baseMapResolution;
 						terrainData.SetDetailResolution((int)detailResolution.x, (int)detailResolution.y);
 						terrainData.alphamapResolution = aplhaMapResolution;
+
+						Debug.Log ("Terrain size: " + terrainData.size); //Correct terrain size
 
 						float[,] heights = new float[terrainData.heightmapWidth,terrainData.heightmapHeight];
 						Vector2 randomLocation;	//for perlin noise
@@ -161,8 +163,9 @@ namespace ResourceManager {
 						*/
 						//terrainData.RefreshPrototypes();
 						//Flush();
-						
-						AssetDatabase.CreateAsset(terrainData,"Assets/Resources/terrainData.asset");
+						#if UNITY_EDITOR
+							AssetDatabase.CreateAsset(terrainData,"Assets/Resources/terrainData.asset");
+						#endif
 						//terrainData.splatPrototypes[] = AssetDatabase.ImportAsset("Game/Ground Textures/")
 					}
 					loadedTerrainData = terrainData;

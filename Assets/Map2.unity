@@ -435,12 +435,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1464247474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d419e4df4c56ab940938e43d53d9b46c, type: 3}
+  m_Script: {fileID: 11500000, guid: e0c71eb001f2711409fef17c609be2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ant: {fileID: 188944, guid: f7666641ebb48e24ea42315bc78ef887, type: 2}
-  spawnLocation: {x: .5, y: .0199999996, z: .5}
-  timeBetweenSpawning: .200000003
+  timeBetweenSpawning: .5
 --- !u!54 &1464247480
 Rigidbody:
   m_ObjectHideFlags: 0
