@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 using System.Collections;
 
 namespace ResourceManager {
@@ -15,13 +13,23 @@ namespace ResourceManager {
 		}
 
 		public static class Terrarium{
-			public static Vector2 GetTerrainCoordinates(Vector3 worldCoordinates){
-				Vector2 terrainCoordinates = new Vector2 ();
-				//
-				return(terrainCoordinates);
+			public static int[] GetTerrainCoordinates(Vector3 worldCoordinates){
+				float[] terrainCoordinates = new float[2];
+				int[] terrainCoordinatesInt = new int[2];
+				terrainCoordinates[0] = worldCoordinates.x / terrainData.size.x;
+				terrainCoordinates[1] = worldCoordinates.z / terrainData.size.z;
+
+				if (terrainCoordinates [0] > 1 || terrainCoordinates [1] > 1)
+					Debug.LogWarning ("GetTerrainCoordinates is not working correctly. terrainCoordinates: " + terrainCoordinates);
+				else {
+					terrainCoordinatesInt[0] = (int)(terrainCoordinates[0] * terrainData.heightmapWidth);
+					terrainCoordinatesInt[1] = (int)(terrainCoordinates[1] * terrainData.heightmapHeight);
+				}
+				Debug.Log (terrainCoordinatesInt[0] + " x " + terrainCoordinatesInt[1] );
+				return(terrainCoordinatesInt);
 			}
 
-			private static bool generateNewTerrain { get { return true; }}
+			private static bool generateNewTerrain { get { return false; }}
 			public static float width { get { return 100.0f; }}
 			public static float length { get { return width; }}
 			public static float height { get { return 20.0f; }}
@@ -110,9 +118,8 @@ namespace ResourceManager {
 					else{
 						Debug.Log("No terrainData found on disk, generating a new random one...");
 
-
-						terrainData.size = new Vector3(width, height - sandBaseHeight, length);
 						terrainData.heightmapResolution = heightmapResolution;
+						terrainData.size = new Vector3(width, height - sandBaseHeight, length);
 						terrainData.baseMapResolution = baseMapResolution;
 						terrainData.SetDetailResolution((int)detailResolution.x, (int)detailResolution.y);
 						terrainData.alphamapResolution = aplhaMapResolution;
@@ -163,9 +170,7 @@ namespace ResourceManager {
 						*/
 						//terrainData.RefreshPrototypes();
 						//Flush();
-						#if UNITY_EDITOR
-							AssetDatabase.CreateAsset(terrainData,"Assets/Resources/terrainData.asset");
-						#endif
+						AssetDatabase.CreateAsset(terrainData,"Assets/Resources/terrainData.asset");
 						//terrainData.splatPrototypes[] = AssetDatabase.ImportAsset("Game/Ground Textures/")
 					}
 					loadedTerrainData = terrainData;

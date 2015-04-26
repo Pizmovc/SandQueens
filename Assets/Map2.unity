@@ -439,6 +439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeBetweenSpawning: .5
+  antPrefab: {fileID: 115592, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
 --- !u!54 &1464247480
 Rigidbody:
   m_ObjectHideFlags: 0

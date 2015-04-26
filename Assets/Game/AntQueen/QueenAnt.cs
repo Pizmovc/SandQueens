@@ -5,6 +5,7 @@ using ResourceManager;
 public class QueenAnt : Ant {
 	private int successiveAntNumber = 0;
 	public float timeBetweenSpawning;
+	public GameObject antPrefab;
 	Vector3 startingPosition = new Vector3 ();
 
 
@@ -13,25 +14,26 @@ public class QueenAnt : Ant {
 		startingPosition.x = (float)RM.Terrarium.terrainData.size.x / 10;
 		startingPosition.y = (float)RM.Terrarium.height;
 		startingPosition.z = (float)RM.Terrarium.terrainData.size.z / 2;
-		//Debug.Log(startingPosition);
+
 		transform.position = startingPosition;
-		StartCoroutine (spawnAnts(timeBetweenSpawning));
+		//StartCoroutine (spawnAnts(timeBetweenSpawning));
 	}
 	
 	// Update is called once per frame
 	public override void Update () {
-		transform.position = startingPosition;
+
+
 	}
 
 
 	IEnumerator spawnAnts(float delay){
-		GameObject ant = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+		GameObject ant = (GameObject)Instantiate (antPrefab, new Vector3(transform.position.x,transform.position.y - 1, transform.position.z), Quaternion.identity);
 		ant.transform.position = transform.position;
 		ant.name = "Ant " + successiveAntNumber.ToString();
 		successiveAntNumber ++;
-		ant.AddComponent<Ant> ();
 		ant.GetComponent<Ant>().AddDestination(new Vector3(Random.Range(10,RM.Terrarium.terrainData.size.x-10),0, Random.Range(10,RM.Terrarium.terrainData.size.z-10)));
 		yield return new WaitForSeconds(delay);
+		transform.Rotate (new Vector3 (0, 0, 0));
 		StartCoroutine(spawnAnts (delay));
 	}
 }

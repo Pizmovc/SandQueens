@@ -10,7 +10,7 @@ public class GenerateTerrarium : MonoBehaviour {
 	void Start () {
 		transform.position = new Vector3 (0, RM.Terrarium.sandBaseHeight, 0);
 		TerrainData terrainData = RM.Terrarium.terrainData;
-
+		//terrainData.SetHeights(
 		GetComponent<Terrain> ().terrainData = terrainData;
 		//GetComponent<Terrain> ().
 		GetComponent<TerrainCollider> ().terrainData = terrainData;
