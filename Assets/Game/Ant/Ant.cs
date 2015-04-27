@@ -49,10 +49,13 @@ public class Ant : MonoBehaviour
 
 	public virtual Vector3 GetDestination()
     {
-		if (destinationList.Count == 0)
-			return(homeCoordinates);
-		else
-			return destinationList [0];
+        if (destinationList.Count == 0)
+        {
+            Destroy(gameObject);
+            return (homeCoordinates);
+        }
+        else
+            return destinationList[0];
 	}
 
     private void DestinationReached()
@@ -128,10 +131,12 @@ public class Ant : MonoBehaviour
         ortogonalToUpAndDirection.Normalize();
         //get a vector that is the actual direction of travel for the ant (ortogonal to up and 'right')
         directionOfTravel = Vector3.Cross(ortogonalToUpAndDirection, transform.up);
-        
+        /*
         Debug.DrawLine(transform.position, transform.position + transform.forward, Color.blue);
         Debug.DrawLine(transform.position, transform.position + directionOfTravel, Color.white);
-        //Debug.Log(Vector3.Distance(currentPosition, targetPosition));
+        
+        Debug.Log(Vector3.Distance(currentPosition, targetPosition));
+        */
         //first, check to see if we're close enough to the target
         if (Vector3.Distance(currentPosition, targetPosition) > 0.2f)
         {
