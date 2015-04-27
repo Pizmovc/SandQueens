@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.Collections;
 
 namespace ResourceManager {
@@ -170,7 +172,9 @@ namespace ResourceManager {
 						*/
 						//terrainData.RefreshPrototypes();
 						//Flush();
-						AssetDatabase.CreateAsset(terrainData,"Assets/Resources/terrainData.asset");
+                        #if UNITY_EDITOR
+                            AssetDatabase.CreateAsset(terrainData, "Assets/Resources/terrainData.asset");
+                        #endif
 						//terrainData.splatPrototypes[] = AssetDatabase.ImportAsset("Game/Ground Textures/")
 					}
 					loadedTerrainData = terrainData;

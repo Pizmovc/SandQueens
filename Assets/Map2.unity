@@ -116,7 +116,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!114 &151117010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,7 +207,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!1 &852630316
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +267,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!1 &899829363
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,7 +351,53 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
+--- !u!1001 &1428282575
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 22.4074764
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 10.4918499
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 50.3377266
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 477636, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+      propertyPath: m_LocalScale.x
+      value: .400000006
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1464247474
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +410,6 @@ GameObject:
   - 65: {fileID: 1464247476}
   - 23: {fileID: 1464247475}
   - 114: {fileID: 1464247479}
-  - 54: {fileID: 1464247480}
   m_Layer: 0
   m_Name: Ant Queen
   m_TagString: Untagged
@@ -426,7 +471,7 @@ Transform:
   m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!114 &1464247479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,20 +483,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c71eb001f2711409fef17c609be2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeBetweenSpawning: .5
+  rotationSpeed: 5
+  timeBetweenSpawning: 1
   antPrefab: {fileID: 115592, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}
---- !u!54 &1464247480
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1464247474}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: .0500000007
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
