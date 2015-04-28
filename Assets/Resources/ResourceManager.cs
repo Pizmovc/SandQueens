@@ -6,6 +6,8 @@ using System.Collections;
 
 namespace ResourceManager {
 	public static class RM {
+        public static int RandomSign { get { return (Random.value < .5f) ? 1 : -1; } }
+
 		public static class Camera{
 			public static float scrollSpeed { get { return 100; }}
 			public static float moveSpeed { get { return 60; }}
@@ -13,7 +15,11 @@ namespace ResourceManager {
 			public static float minCameraHeight { get { return RM.Terrarium.height; } }
 			public static float maxCameraHeight { get { return 4*RM.Terrarium.height; } }
 		}
-
+        public static class AntSettings
+        {
+            public static float nodeDistance { get { return (Random.Range(2.0f,5.0f)); } }
+            public static float nodeSpreadAngle { get { return (RM.RandomSign * Random.Range(10.0f, 45.0f)); } } 
+        }
 		public static class Terrarium{
 			public static int[] GetTerrainCoordinates(Vector3 worldCoordinates){
 				float[] terrainCoordinates = new float[2];

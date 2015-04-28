@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using ResourceManager;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -9,59 +10,50 @@ using System.Collections.Generic;
 
 public class Ant : MonoBehaviour
 {
-	private List<Vector3> destinationList;
-	private Vector3 homeCoordinates;
+	private List<MapNode> destinationList = new List<MapNode>();
+	private MapNode homeNode;
     private float movementSpeed = 3;
     public float rotationSpeed = 2;
+    private AntType antType;
 
 	public Ant()
     {
-		destinationList = new List<Vector3> ();
+        antType = AntType.worker;
 	}
+
+    public Ant(AntType type)
+    {
+        antType = type;
+    }
 
 	public virtual void Start()
     {
-        
+        SetUpDir();
 	}
 	
 	public virtual void Update ()
     {
         SetUpDir();
         MoveTowardsTarget();
-        
 	}
 
-	public virtual void SetHomeCoordinates(Vector3 home)
+	public virtual MapNode GetHomeCoordinates()
     {
-		homeCoordinates = home;
-	}
-
-	public virtual Vector3 GetHomeCoordinates()
-    {
-		return(homeCoordinates);
-	}
-
-	public virtual void AddDestination(Vector3 destination)
-    {
-		//Debug.Log ("Destination: " + destination);
-		destinationList.Add(destination);
-	}
-
-	public virtual Vector3 GetDestination()
-    {
-        if (destinationList.Count == 0)
-        {
-            Destroy(gameObject);
-            return (homeCoordinates);
-        }
-        else
-            return destinationList[0];
+		return(homeNode);
 	}
 
     private void DestinationReached()
-    {
-        if (destinationList.Count != 0)
+    {/*
+        if(destinationList[0].type != NodeType.link)
+            Debug.Log("Destination reached: " + destinationList[0].type.ToString());*/
+        if (destinationList.Count > 0)
+        {
             destinationList.RemoveAt(0);
+        }
+        else
+        {   
+            Destroy(gameObject);
+        }
     }
 
 	public virtual void Eat()
@@ -116,29 +108,83 @@ public class Ant : MonoBehaviour
         */
     }
 
-    //move towards a target at a set speed.
+    public void AddNode(MapNode node)
+    {
+        if (node.IsOfType(NodeType.link))
+            destinationList.Insert(0, node);
+        else if (node.IsOfType(NodeType.antHill))
+            homeNode = node;
+        else
+            destinationList.Add(node);
+    }
+
+    public void AddNode(Vector3 loc, NodeType type)
+    {
+        MapNode newNode = new MapNode(loc, type);
+        AddNode(newNode);
+    }
+
+    private MapNode GetNode(NodeType type)
+    {
+        if (destinationList.Count != 0)
+        {
+            foreach (MapNode node in destinationList)
+            {
+                if (node.IsOfType(type))
+                {
+                    return node;
+                }
+            }
+            return (null);
+           
+        }
+        else
+        {
+            return homeNode;
+        }
+    }
+
+    private MapNode GetNode()
+    {
+        if (destinationList.Count != 0)
+            return destinationList[0];
+        else
+        {
+            return homeNode;
+        }
+    }
+
     private void MoveTowardsTarget()
     {
-        Vector3 targetPosition = GetDestination();
-        targetPosition.y = transform.position.y;
-        Vector3 currentPosition = this.transform.position;
+        MapNode node = GetNode();
+        if (node == null)
+        {
+            Debug.Log("GetNode returned null for " + gameObject.name);
+            return;
+        }
+        Vector3 directionOfTravel = node.GetDirectionFrom(transform);
 
-        Vector3 directionOfTravel = targetPosition - currentPosition;
-        directionOfTravel.Normalize();
-
-        //get a vector that is ortogonal to transform.up and direction of travel
-        Vector3 ortogonalToUpAndDirection = Vector3.Cross(transform.up, directionOfTravel);
-        ortogonalToUpAndDirection.Normalize();
-        //get a vector that is the actual direction of travel for the ant (ortogonal to up and 'right')
-        directionOfTravel = Vector3.Cross(ortogonalToUpAndDirection, transform.up);
+        if (!node.IsOfType(NodeType.link))
+        {
+            if (Vector3.Distance(transform.position, node.GetLocation(transform)) > 2*RM.AntSettings.nodeDistance)
+            {
+                AddNode(node.GenerateLinkNode(transform, directionOfTravel));
+                MoveTowardsTarget();
+                return;
+            }
+        }
         /*
         Debug.DrawLine(transform.position, transform.position + transform.forward, Color.blue);
         Debug.DrawLine(transform.position, transform.position + directionOfTravel, Color.white);
-        
-        Debug.Log(Vector3.Distance(currentPosition, targetPosition));
+        Debug.DrawLine(transform.position, node.GetLocation(transform));
+        if (GetNode(NodeType.food) != null)
+        {
+            Debug.DrawLine(transform.position, GetNode(NodeType.food).location, Color.red);
+            Debug.DrawRay(GetNode(NodeType.food).location, Vector3.up*100);
+        }
         */
         //first, check to see if we're close enough to the target
-        if (Vector3.Distance(currentPosition, targetPosition) > 0.2f)
+        if (Vector3.Distance(transform.position, node.GetLocation(transform)) > 0.1f)
         {
             float angleBetweenForwardAndDirection = AngleSigned(transform.forward, directionOfTravel, transform.up);
             //Debug.Log(angleBetweenForwardAndDirection);
@@ -146,16 +192,13 @@ public class Ant : MonoBehaviour
             {
                 this.transform.Rotate(0, angleBetweenForwardAndDirection * rotationSpeed * Time.deltaTime, 0);
             }
-
-            float adjustedMovementSpeed = movementSpeed * ((180 - angleBetweenForwardAndDirection) / 180);
-
+            float adjustedMovementSpeed = movementSpeed * ((180 - Mathf.Abs(angleBetweenForwardAndDirection)) / 180);
             //scale the movement on each axis by the directionOfTravel vector components
             this.transform.Translate(
                 (transform.forward.x * adjustedMovementSpeed * Time.deltaTime),
                 (transform.forward.y * adjustedMovementSpeed * Time.deltaTime),
                 (transform.forward.z * adjustedMovementSpeed * Time.deltaTime),
                 Space.World);
-            
         }
         else
         {
@@ -176,3 +219,4 @@ public class Ant : MonoBehaviour
 
     
 }
+public enum AntType { queen, worker, soldier, nurse};
