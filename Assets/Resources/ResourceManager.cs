@@ -6,8 +6,13 @@ using System.Collections;
 
 namespace ResourceManager {
 	public static class RM {
+        /// <summary>
+        /// A function that returns either 1 or -1.
+        /// </summary>
         public static int RandomSign { get { return (Random.value < .5f) ? 1 : -1; } }
-
+        /// <summary>
+        /// Variables used for camera movement.
+        /// </summary>
 		public static class Camera{
 			public static float scrollSpeed { get { return 100; }}
 			public static float moveSpeed { get { return 60; }}
@@ -15,11 +20,23 @@ namespace ResourceManager {
 			public static float minCameraHeight { get { return RM.Terrarium.height; } }
 			public static float maxCameraHeight { get { return 4*RM.Terrarium.height; } }
 		}
+        /// <summary>
+        /// Contains various variables and methods for ants.
+        /// </summary>
         public static class AntSettings
         {
+            /// <summary>
+            /// Distance between two nodes when creating them.
+            /// </summary>
             public static float nodeDistance { get { return (Random.Range(2.0f,5.0f)); } }
+            /// <summary>
+            /// Angle of deviation from normal direction of travel.
+            /// </summary>
             public static float nodeSpreadAngle { get { return (RM.RandomSign * Random.Range(10.0f, 45.0f)); } } 
         }
+        /// <summary>
+        /// Contains various variables and methods for terrain.
+        /// </summary>
 		public static class Terrarium{
 			public static int[] GetTerrainCoordinates(Vector3 worldCoordinates){
 				float[] terrainCoordinates = new float[2];
@@ -36,17 +53,35 @@ namespace ResourceManager {
 				Debug.Log (terrainCoordinatesInt[0] + " x " + terrainCoordinatesInt[1] );
 				return(terrainCoordinatesInt);
 			}
-
+            /// <summary>
+            /// Used by <see cref="terrainData()"/> to see if it needs to generate new terrainData.
+            /// </summary>
 			private static bool generateNewTerrain { get { return false; }}
+            /// <summary>
+            /// Width of the terrarium (x axis).
+            /// </summary>
 			public static float width { get { return 100.0f; }}
+            /// <summary>
+            /// Length of the terrarium (z axis).
+            /// </summary>
 			public static float length { get { return width; }}
+            /// <summary>
+            /// Height of the terrarium (y axis).
+            /// </summary>
 			public static float height { get { return 20.0f; }}
 			public static float sandBaseHeight { get { return 10.0f; }}
 			private static int heightmapResolution { get { return 256 + 1; }}
 			private static int baseMapResolution { get { return 1024; }}
 			private static Vector2 detailResolution { get { return new Vector2(1024, 16); }}
 			private static int aplhaMapResolution { get { return heightmapResolution; }}
-			private static float scale { get { return 80.0f; }}
+            /// <summary>
+            /// Scale for use in PerlinNoise for generating random terrain.
+            /// </summary>
+			private static float perlinNoiseScale { get { return 80.0f; }}
+            /// <summary>
+            /// Uses textures in resources to create splatmaps.
+            /// <para>Currently not fully working.</para>
+            /// </summary>
 			private static SplatPrototype[] splatTextures { get { 
 					SplatPrototype[] tempSplat = new SplatPrototype[2];
 
@@ -94,6 +129,9 @@ namespace ResourceManager {
 //			}}
 			private static bool isTerrainLoaded;
 			private static TerrainData _loadedTerrainData;
+            /// <summary>
+            /// Getter and setter for _loadedTerrainData which stores terrainData.
+            /// </summary>
 			private static TerrainData loadedTerrainData { 
 				get {
 					if(isTerrainLoaded)
@@ -111,7 +149,7 @@ namespace ResourceManager {
 			/// <summary>
 			/// Gets the terrain data either from memory if its loaded, from disk if it isnt, or generates a new one of neither of those are available.
 			/// </summary>
-			/// <value>The terrain data.</value>
+			/// <value>The created or loaded terrain data.</value>
 			public static TerrainData terrainData {
 				get {
 					TerrainData terrainData = new TerrainData();
@@ -141,7 +179,7 @@ namespace ResourceManager {
 						//Debug.Log (terrainData.heightmapWidth + " x " + terrainData.heightmapWidth);
 						for (int x = 0; x < terrainData.heightmapWidth; x++) {
 							for (int z = 0; z < terrainData.heightmapWidth; z++) {
-								heights[x,z] = Mathf.PerlinNoise(randomLocation.x + (float)x/scale, randomLocation.y + (float)z/scale);
+								heights[x,z] = Mathf.PerlinNoise(randomLocation.x + (float)x/perlinNoiseScale, randomLocation.y + (float)z/perlinNoiseScale);
 								//Debug.Log(heights[x,z]);
 							}
 						}
