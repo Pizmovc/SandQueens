@@ -32,3 +32,9 @@ SandQueens_Data/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# ===== #
+# OTHER #
+# ===== #
+*.sublime-project
+*.sublime-workspace
