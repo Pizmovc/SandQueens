@@ -86,4 +86,4 @@ public class MapNode {
         return (newNode);
     }
 }
-public enum NodeType { food, enemy, anObject, antHill, link };
+public enum NodeType { food, enemy, anObject, antHill, link, detour};

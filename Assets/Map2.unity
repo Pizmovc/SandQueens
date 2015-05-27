@@ -98,6 +98,7 @@ GameObject:
   - 154: {fileID: 151117012}
   - 218: {fileID: 151117011}
   - 114: {fileID: 151117010}
+  - 114: {fileID: 151117013}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -169,6 +170,18 @@ TerrainCollider:
   m_Enabled: 1
   m_TerrainData: {fileID: 0}
   m_EnableTreeColliders: 1
+--- !u!114 &151117013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 151117008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc9ba7a706232854e91e9335b5033859, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rock: {fileID: 108418, guid: 64a08c992a6d08c46875bef06fae27bc, type: 2}
 --- !u!1 &169734312
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,5 +451,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 5
-  timeBetweenSpawning: .200000003
+  timeBetweenSpawning: 1
   antPrefab: {fileID: 115592, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}

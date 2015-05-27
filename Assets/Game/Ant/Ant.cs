@@ -58,12 +58,6 @@ public class Ant : MonoBehaviour
         homeNode = node;
     }
 
-    
-
-	public virtual void Eat()
-    {
-		//reduce amount of food by X (more if queen, or fighter, less if worker, nursery ant)
-	}
     /// <summary>
     /// Sets the up direction of the transform according to underlying terrain.
     /// </summary>
@@ -108,27 +102,30 @@ public class Ant : MonoBehaviour
         Debug.DrawLine(fl.point, frontLeft);
         Debug.DrawLine(fr.point, frontRight);*/
     }
+
     /// <summary>
-    /// Add node to <see cref="nodeList"/>.
+    /// Add node to <see cref="nodeList"/>. If the NodeType is Link, then it is inserted to the beggining of the list,
+    ///  if its of type antHill it is set as homeNode, 
+    ///  otherwise it is added to the end of the list
     /// </summary>
     /// <param name="node">Node to be added.</param>
     public void AddNode(MapNode node)
     {
-        if (node.IsOfType(NodeType.link))
+        if (node.IsOfType(NodeType.link) || node.IsOfType(NodeType.detour))
             nodeList.Insert(0, node);
         else if (node.IsOfType(NodeType.antHill))
             SetHomeNode(node);
         else
             nodeList.Add(node);
     }
-    
+
     public void AddNode(Vector3 loc, NodeType type)
     {
         MapNode newNode = new MapNode(loc, type);
         AddNode(newNode);
     }
     /// <summary>
-    /// Get a node from <see cref="nodeList"/> if it exist, otherwise returns homeNode.
+    /// Get a node from <see cref="nodeList"/> if it exist, otherwise returns null.
     /// </summary>
     /// <param name="type">Type of node to get.</param>
     /// <returns></returns>
@@ -140,7 +137,7 @@ public class Ant : MonoBehaviour
         }
         else
         {
-            return GetHomeNode();
+            return null;
         }
     }
     /// <summary>
@@ -157,34 +154,56 @@ public class Ant : MonoBehaviour
     /// </summary>
     /// <param name="node"></param>
     private void NodeReached(MapNode node)
-        {/*
-            if(destinationList[0].type != NodeType.link)
-                Debug.Log("Destination reached: " + destinationList[0].type.ToString());*/
-            if (node == GetHomeNode())
-            {
-                Debug.Log("Welcome home " + gameObject.name);
-                Destroy(gameObject);
-            }
-            else if (nodeList.Count == 0)
-            {
-                Debug.LogWarning("Can't remove destination, as destination list is empty.");
-            }
-            else if (nodeList.Exists(item => item == node))
-            {
-                nodeList.Remove(node);
-            }
-            else
-            {
-                Debug.LogError("Something went wrong! DestinationReached has failed!");
-                Debug.Break();
-            }
+    {/*
+        if(destinationList[0].type != NodeType.link)
+            Debug.Log("Destination reached: " + destinationList[0].type.ToString());*/
+        if (node == GetHomeNode())
+        {
+            Debug.Log("Welcome home " + gameObject.name);
+            Destroy(gameObject);
         }
+        else if (nodeList.Count == 0)
+        {
+            Debug.LogWarning("Can't remove destination, as destination list is empty.");
+        }
+        else if (nodeList.Exists(item => item == node))
+        {
+            nodeList.Remove(node);
+        }
+        else
+        {
+            Debug.LogError("Something went wrong! DestinationReached has failed! " + node);
+            Debug.Break();
+        }
+    }
+    private void RemoveNode(MapNode node)
+    {
+        if (node == GetHomeNode())
+        {
+            Debug.LogError("Tried to remove homeNode: " + gameObject.name);
+            Debug.Break();
+        }
+        else if (nodeList.Count == 0)
+        {
+            Debug.LogWarning("Can't remove destination, as destination list is empty.");
+        }
+        else if (nodeList.Exists(item => item == node))
+        {
+            nodeList.Remove(node);
+        }
+        else
+        {
+            Debug.LogError("Something went wrong! RemoveNode has failed! " + node);
+            Debug.Break();
+        }
+    }
     /// <summary>
     /// A function that looks at target node and creates linking nodes, 
     /// adds wiggle to the path and moves the ant in the desired direction.
     /// </summary>
     private void MoveTowardsTarget()
     {
+        checkForCollisions();
         MapNode node = GetNode();
         if (node == null)
         {
@@ -199,10 +218,12 @@ public class Ant : MonoBehaviour
             MoveTowardsTarget();
             return;
         }
-        /*
-        Debug.DrawLine(transform.position, transform.position + transform.forward, Color.blue);
-        Debug.DrawLine(transform.position, transform.position + directionOfTravel, Color.white);
-        Debug.DrawLine(transform.position, node.GetLocation(transform));
+        
+
+        
+        //Debug.DrawLine(transform.position, transform.position + transform.forward, Color.blue);
+        //Debug.DrawLine(transform.position, transform.position + directionOfTravel, Color.white);
+        /*Debug.DrawLine(transform.position, node.GetLocation(transform));
         if (GetNode(NodeType.food) != null)
         {
             Debug.DrawLine(transform.position, GetNode(NodeType.food).location, Color.red);
@@ -246,6 +267,76 @@ public class Ant : MonoBehaviour
             Vector3.Dot(firstVector, secondVector)) * Mathf.Rad2Deg;
     }
 
-    
+    private void checkForCollisions()
+    {
+        Vector3[] directions = {    (transform.forward - transform.right).normalized * 0.5f,  //outermost left (not used in raycasting)
+                                (2 * transform.forward - transform.right).normalized * 0.8f,  //a lot to left
+                                (4 * transform.forward - transform.right).normalized,  //a bit to left
+                                transform.forward, //forward
+                                (4 * transform.forward + transform.right).normalized,  // a bit to right
+                                (2 * transform.forward + transform.right).normalized * 0.8f,  //a lot to right
+                                    (transform.forward + transform.right).normalized * 0.5f,  //outermost right (not used in raycasting)
+                            };
+        /*
+        Debug.DrawLine(transform.position, transform.position + directions[0], Color.red);
+        Debug.DrawLine(transform.position, transform.position + directions[1], Color.blue);
+        Debug.DrawLine(transform.position, transform.position + directions[2], Color.white);
+        Debug.DrawLine(transform.position, transform.position + directions[3], Color.yellow);
+        Debug.DrawLine(transform.position, transform.position + directions[4], Color.white);
+        Debug.DrawLine(transform.position, transform.position + directions[5], Color.blue);
+        Debug.DrawLine(transform.position, transform.position + directions[6], Color.red);
+        */
+        RaycastHit[] hits = new RaycastHit[7];
+        bool[] bools = new bool[7];
+
+        bool isColliding = false;
+
+        for (int i = 0; i < 7; i++)
+        {
+            bools[i] = Physics.Raycast(transform.position, directions[i], out hits[i], 1.0f);
+            //Debug.Log(i + " " + bools[i]);
+            if (bools[i])
+                isColliding = true;
+        }
+        if (!isColliding)
+            return;
+
+        int leftCount = 0;
+        int rightCount = 0;
+
+        if (bools[1])
+            leftCount++;
+        if (bools[2])
+            leftCount++;
+        if (bools[4])
+            rightCount++;
+        if (bools[5])
+            rightCount++;
+
+        int index;
+        if (leftCount < rightCount)
+            index = 0;
+        else if (leftCount > rightCount)
+            index = 6;
+        else
+            index = Random.Range(0, 2) * 6;
+
+        MapNode toDelete = GetNode(NodeType.link);
+        while (toDelete != null)
+        {
+            RemoveNode(toDelete);
+            toDelete = GetNode(NodeType.link);
+        }
+
+        toDelete = GetNode(NodeType.detour);
+        while (toDelete != null)
+        {
+            RemoveNode(toDelete);
+            toDelete = GetNode(NodeType.detour);
+        }
+        AddNode(transform.position + directions[index], NodeType.detour);
+
+        
+    }
 }
 public enum AntType { queen, worker, soldier, nurse};
