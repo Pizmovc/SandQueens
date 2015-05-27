@@ -210,7 +210,7 @@ public class Ant : MonoBehaviour
         }
         */
         //first, check to see if we're close enough to the target
-        if (Vector3.Distance(transform.position, node.GetLocation(transform)) > 0.1f)
+        if (Vector3.Distance(transform.position, node.GetLocation(transform)) > 0.4f)
         {
             float angleBetweenForwardAndDirection = AngleSigned(transform.forward, directionOfTravel, transform.up);
             //Debug.Log(angleBetweenForwardAndDirection);
