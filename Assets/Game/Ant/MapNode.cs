@@ -2,17 +2,19 @@
 using System.Collections;
 using ResourceManager;
 
+//public enum NodeType { food, enemy, anObject, antHill, link, detour, waitForSec, waitForAnt };
 public class MapNode {
 
-    private NodeType type;
+    private string type;
     private Vector3 location;
+    private float waitTime;
 
     /// <summary>
     /// Constructor for MapNode.
     /// </summary>
     /// <param name="destination">Nodes location.</param>
     /// <param name="type">Type of this node.</param>
-    public MapNode(Vector3 destination, NodeType type)
+    public MapNode(Vector3 destination, string type)
     {
         this.location = destination;
         this.type = type;   
@@ -22,7 +24,7 @@ public class MapNode {
     /// Function for getting this nodes type.
     /// </summary>
     /// <returns><code>NodeType</code> type of this node.</returns>
-    public NodeType GetNodeType()
+    public string GetNodeType()
     {
         return (type);
     }
@@ -32,7 +34,7 @@ public class MapNode {
     /// </summary>
     /// <param name="type">NodeType used for checking.</param>
     /// <returns><code>True</code> if  this node is of type type, otherwise returns <code>false</code>.</returns>
-    public bool IsOfType(NodeType type)
+    public bool IsOfType(string type)
     {
         if (this.type == type)
             return (true);
@@ -81,9 +83,8 @@ public class MapNode {
         Quaternion rotation = Quaternion.Euler(0,RM.AntSettings.nodeSpreadAngle, 0);
         Vector3 nodeLocationLocal = rotation * directionOfTravel;
         nodeLocationLocal = nodeLocationLocal * RM.AntSettings.nodeDistance + tran.position;
-        MapNode newNode = new MapNode(nodeLocationLocal, NodeType.link);
+        MapNode newNode = new MapNode(nodeLocationLocal, "link");
         //Debug.Log(newNode.nodeLocation);
         return (newNode);
     }
 }
-public enum NodeType { food, enemy, anObject, antHill, link, detour};

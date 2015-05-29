@@ -14,26 +14,27 @@ public class Ant : MonoBehaviour
 	private MapNode homeNode;
     private float movementSpeed = 3;
     public float rotationSpeed = 2;
-    private AntType antType;
+    private string antType;
+
     /// <summary>
     /// Creates basic worker ant.
     /// </summary>
 	public Ant()
     {
-        antType = AntType.worker;
+        antType = "worker";
 	}
     /// <summary>
     /// Contructor for a new Ant of type <paramref name="type"/>.
     /// </summary>
     /// <param name="type">Type of contructed ant.</param>
-    public Ant(AntType type)
+    public Ant(string type)
     {
         antType = type;
     }
 
 	public virtual void Start()
     {
-        SetUpDir();
+        //GetInstanceID()
 	}
 	
 	public virtual void Update ()
@@ -111,15 +112,15 @@ public class Ant : MonoBehaviour
     /// <param name="node">Node to be added.</param>
     public void AddNode(MapNode node)
     {
-        if (node.IsOfType(NodeType.link) || node.IsOfType(NodeType.detour))
+        if (node.IsOfType("link") || node.IsOfType("detour"))
             nodeList.Insert(0, node);
-        else if (node.IsOfType(NodeType.antHill))
+        else if (node.IsOfType("antHill"))
             SetHomeNode(node);
         else
             nodeList.Add(node);
     }
 
-    public void AddNode(Vector3 loc, NodeType type)
+    public void AddNode(Vector3 loc, string type)
     {
         MapNode newNode = new MapNode(loc, type);
         AddNode(newNode);
@@ -129,7 +130,7 @@ public class Ant : MonoBehaviour
     /// </summary>
     /// <param name="type">Type of node to get.</param>
     /// <returns></returns>
-    private MapNode GetNode(NodeType type)
+    private MapNode GetNode(string type)
     {
         if (nodeList.Count != 0)
         {
@@ -212,7 +213,7 @@ public class Ant : MonoBehaviour
         }
         Vector3 directionOfTravel = node.GetDirectionFrom(transform);
 
-        if (!node.IsOfType(NodeType.link) && Vector3.Distance(transform.position, node.GetLocation(transform)) > 2*RM.AntSettings.nodeDistance)
+        if (!node.IsOfType("link") && Vector3.Distance(transform.position, node.GetLocation(transform)) > 2*RM.AntSettings.nodeDistance)
         {
             AddNode(node.GenerateLinkNode(transform, directionOfTravel));
             MoveTowardsTarget();
@@ -321,22 +322,20 @@ public class Ant : MonoBehaviour
         else
             index = Random.Range(0, 2) * 6;
 
-        MapNode toDelete = GetNode(NodeType.link);
+        MapNode toDelete = GetNode("link");
         while (toDelete != null)
         {
             RemoveNode(toDelete);
-            toDelete = GetNode(NodeType.link);
+            toDelete = GetNode("link");
         }
 
-        toDelete = GetNode(NodeType.detour);
+        toDelete = GetNode("detour");
         while (toDelete != null)
         {
             RemoveNode(toDelete);
-            toDelete = GetNode(NodeType.detour);
+            toDelete = GetNode("detour");
         }
-        AddNode(transform.position + directions[index], NodeType.detour);
-
-        
+        AddNode(transform.position + directions[index], "detour"); 
     }
 }
-public enum AntType { queen, worker, soldier, nurse};
+//public enum AntType { queen, worker, soldier, nurse};

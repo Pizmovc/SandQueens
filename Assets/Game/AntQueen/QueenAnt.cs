@@ -39,9 +39,9 @@ public class QueenAnt : Ant {
 		GameObject ant = (GameObject)Instantiate (antPrefab, transform.position, Quaternion.identity);
 		ant.name = "Ant " + successiveAntNumber.ToString();
 		successiveAntNumber ++;
-        ant.GetComponent<Ant>().AddNode(new Vector3(Random.Range(10, RM.Terrarium.terrainData.size.x - 10), 0, Random.Range(10, RM.Terrarium.terrainData.size.z - 10)), NodeType.food);
-        ant.GetComponent<Ant>().AddNode(new Vector3(Random.Range(10, RM.Terrarium.terrainData.size.x - 10), 0, Random.Range(10, RM.Terrarium.terrainData.size.z - 10)), NodeType.food);
-        ant.GetComponent<Ant>().AddNode(transform.position, NodeType.antHill);
+        ant.GetComponent<Ant>().AddNode(new Vector3(Random.Range(10, RM.Terrarium.terrainData.size.x - 10), 0, Random.Range(10, RM.Terrarium.terrainData.size.z - 10)), "food");
+        ant.GetComponent<Ant>().AddNode(new Vector3(Random.Range(10, RM.Terrarium.terrainData.size.x - 10), 0, Random.Range(10, RM.Terrarium.terrainData.size.z - 10)), "food");
+        ant.GetComponent<Ant>().AddNode(transform.position, "antHill");
 		yield return new WaitForSeconds(delay);
 		transform.Rotate (new Vector3 (0, 0, 0));
         StartCoroutine(spawnAnts(timeBetweenSpawning));
