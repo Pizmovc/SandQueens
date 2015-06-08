@@ -7,13 +7,14 @@ using ResourceManager;
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(AntMovement))]
+[RequireComponent(typeof(AntCommunication))]
 
 public class Ant : MonoBehaviour
 {
 	private List<MapNode> nodeList = new List<MapNode>();
 	private MapNode homeNode;
     private float movementSpeed = 3;
-    public float rotationSpeed = 2;
+    private float rotationSpeed = 2;
     private string antType;
 
     /// <summary>
@@ -21,6 +22,7 @@ public class Ant : MonoBehaviour
     /// </summary>
 	public Ant()
     {
+        antType = antType + " ";
         antType = "worker";
 	}
     /// <summary>
@@ -145,9 +147,9 @@ public class Ant : MonoBehaviour
     /// Get a node from <see cref="nodeList"/>.
     /// </summary>
     /// <returns>If <see cref="nodeList"/> is not empty it returns first element, othewise returs <see cref="GetHomeNode()"/></returns>
-    private MapNode GetNode()
+    public MapNode GetNode()
     {
-        return (nodeList.Count != 0) ? nodeList[0] : GetHomeNode();
+        return (nodeList.Count != 0) ? nodeList[0] : null;
     }
     /// <summary>
     /// Removes a node from NodeList as it was reached.
@@ -205,7 +207,7 @@ public class Ant : MonoBehaviour
     private void MoveTowardsTarget()
     {
         checkForCollisions();
-        MapNode node = GetNode();
+        MapNode node = (GetNode() != null) ? GetNode() : GetHomeNode();
         if (node == null)
         {
             Debug.Log("GetNode returned null for " + gameObject.name);
@@ -232,7 +234,7 @@ public class Ant : MonoBehaviour
         }
         */
         //first, check to see if we're close enough to the target
-        if (Vector3.Distance(transform.position, node.GetLocation(transform)) > 0.4f)
+        if (Vector3.Distance(transform.position, node.GetLocation(transform)) > 0.3f)
         {
             float angleBetweenForwardAndDirection = AngleSigned(transform.forward, directionOfTravel, transform.up);
             //Debug.Log(angleBetweenForwardAndDirection);
@@ -301,6 +303,16 @@ public class Ant : MonoBehaviour
         }
         if (!isColliding)
             return;
+
+        for (int i = 0; i < 7; i++)
+        {
+            if (bools[i] && hits[i].transform.name.Contains("Ant"))
+            {
+                GetComponent<AntCommunication>().AvoidCollision(hits[i]);
+                //return;
+            }
+
+        }
 
         int leftCount = 0;
         int rightCount = 0;

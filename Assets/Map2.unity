@@ -450,6 +450,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c71eb001f2711409fef17c609be2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 5
   timeBetweenSpawning: 1
   antPrefab: {fileID: 115592, guid: bd7650d77287ef94587ce3e9ec3f4fa5, type: 2}

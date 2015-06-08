@@ -7,7 +7,7 @@ public class MapNode {
 
     private string type;
     private Vector3 location;
-    private float waitTime;
+    //private float waitTime;
 
     /// <summary>
     /// Constructor for MapNode.
